@@ -35,21 +35,62 @@ github-chatbot/
 
 ---
 
-### GitHub Chatbot for MLOps Projects
+## GitHub Chatbot for MLOps Projects
 
-This document describes the architecture and implementation of a production-oriented chatbot that answers questions by retrieving information from internal GitHub repositories. The system is built to serve MLOps projects, where all information comes from your repositories (e.g., model registry, data pipelines, SQL conversion tools, document indexing, etc.). The solution is designed for developers, architects, and product managers and explains both the high-level design and technical details.
+This document describes the architecture and implementation of a production-oriented chatbot that answers questions by retrieving information from internal GitHub repositories and cloud logging. The system is built to serve MLOps projects, where all knowledge information comes from your repositories (e.g., model registry, data pipelines, SQL conversion tools, document indexing, etc.) and cloud logging for operations assistanance. The solution is designed for developers, architects, and product managers and explains both the high-level design and technical details.
+
+This system combines two critical MLOps functions in one assistant:
+
+1. **Knowledge Assistant**
+   Answers technical questions using:
+   * Code/documentation from GitHub repositories
+   * Architectural knowledge graph
+   * Vector similarity search
+2. **Operations Assistant**
+   Provides real-time insights about:
+   * Pipeline execution status
+   * SQL generation requests
+   * Document processing jobs
+   * System health metrics
 
 ```mermaid
 flowchart TD
-    A[Developer Questions] --> B[MLOps Assistant]
-    B --> C[Code Understanding]
-    B --> D[Data Pipeline Insights]
-    B --> E[Model Registry Help]
-    B --> F[SQL Generation]
-    B --> G[Doc Search]
+    A[MLPlatform User Questions] --> B[MLOps Assistant/chatbot]
+  
+    subgraph Bifurcation
+        B --> C{Query Type}
+        C -->|"How?" Questions| D[Knowledgebase Assistant]
+        C -->|"Status?" Questions| E[Request State]
+    end
+  
+    subgraph Knowledgebase_Flow
+        D --> F[VectorDB Search]
+        D --> G[Knowledge Graph]
+        F --> H[Milvus VectorDB]
+        H --> I[Partition: MLOps_Code]
+        H --> J[Partition: Documentation]
+        G --> K[Code Relationships]
+        G --> L[Service Dependencies]
+    end
+  
+    subgraph RequestState_Flow
+        E --> M[Cloud Logging]
+        E --> N[Redis Cache]
+        E --> O[BigQuery]
+        M --> P[Log Router]
+        P --> Q[Pub/Sub]
+        Q --> R[Real-Time Alerts]
+    end
 ```
 
-### **System Architecture (Mermaid Diagram)**
+
+### **Knowledge Assistant**
+Answers technical questions using:* Code/documentation from GitHub repositories
+
+* Architectural knowledge graph
+* Vector similarity search
+
+#### **System Architecture (Mermaid Diagram)**
 
 The chatbot ingests multiple GitHub repositories, processes and indexes code and documentation, and uses a hybrid approach of vector search and a knowledge graph to understand and answer queries. The entire system runs within the intranet without relying on external sources.
 
@@ -103,9 +144,9 @@ flowchart TD
 
 ```
 
-### **Detailed Component Breakdown**
+#### **Detailed Component Breakdown**
 
-#### **1. Multi-Repo Ingestion Pipeline**
+##### **1. Multi-Repo Ingestion Pipeline**
 
 This pipeline is responsible for ingesting multiple GitHub repositories related to MLOps projects. The process involves cloning repositories, preprocessing code and documentation, and chunking the content while preserving metadata.
 
@@ -156,7 +197,7 @@ def process_docs(docs, repo_name):
     return chunks
 ```
 
-#### **2. Hybrid Vector DB Indexing**
+##### **2. Hybrid Vector DB Indexing**
 
 After processing the repositories, the system creates a semantic index of the code and documentation using a vector database. This allows the chatbot to quickly find relevant chunks based on a user query.
 
@@ -195,7 +236,7 @@ def create_index(chunks):
     return vectorstore, metadata_index
 ```
 
-#### **3. Knowledge Graph Integration**
+##### **3. Knowledge Graph Integration**
 
 To complement semantic search, the chatbot builds a knowledge graph that maps code entities (e.g., classes, functions, modules) and their relationships. This enhances query understanding and enables multi-hop reasoning.
 
@@ -213,7 +254,7 @@ flowchart LR
     D --> E[Query Expansion\n- Related Entities\n- Dependency Paths]
 ```
 
-#### **4. Query Processing Flow**
+##### **4. Query Processing Flow**
 
 This component handles user queries by combining results from the vector database and the knowledge graph, then synthesizing an answer with an LLM.
 
@@ -263,7 +304,7 @@ def answer_question(query, vectorstore, kg_connection):
 
 ---
 
-#### **5. UX Flow Diagram**
+##### **5. UX Flow Diagram**
 
 Below is a sequence diagram showing the end-to-end user interaction with the chatbot:
 
@@ -295,6 +336,37 @@ sequenceDiagram
 ```
 
 ---
+
+
+
+### **Operations Assistant**
+Provides real-time insights about:* Pipeline execution status
+
+* SQL generation requests
+* Document processing jobs
+* System health metrics
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Chatbot
+    participant Redis
+    participant BigQuery
+  
+    User->>Chatbot: "Status of pipeline PCI-1234?"
+    Chatbot->>Redis: GET status:PCI-1234
+    alt Cache Hit
+        Redis-->>Chatbot: Return cached data
+    else Cache Miss
+        Chatbot->>BigQuery: SELECT * FROM logs WHERE pipeline_id = 'PCI-1234' ORDER BY timestamp DESC LIMIT 1
+        BigQuery-->>Chatbot: Return historical data
+        Chatbot->>Redis: SET status:PCI-1234
+    end
+    Chatbot->>LLM: "Generate response with: {status: 'failed', error: 'OOM', docs: '...'}"
+    LLM-->>Chatbot: "Pipeline failed due to memory limits (ERR-451)..."
+    Chatbot-->>User: Response with status and docs
+```
+
 
 #### **6. Production-Grade Optimizations**
 
@@ -474,7 +546,6 @@ This document has provided a comprehensive overview of the internal GitHub chatb
 
 Feel free to adjust specific components (e.g., the chunking strategy, embedding model, or LLM service) to best fit the unique requirements of your projects.
 
-
 ### Some useful information
 
 ##### **1. How It Helps the Hybrid Search & Knowledge Graph**
@@ -499,7 +570,7 @@ Feel free to adjust specific components (e.g., the chunking strategy, embedding 
 
   If a query involves “How is data processed?”, the system can traverse the graph to determine that `DataProcessor.process` is involved, and then link back to the vector-indexed code chunk for that method.
 
-    Thus, the combination of AST-based entity extraction and the knowledge graph allows for precise query augmentation and a deeper semantic 		understanding of the codebase.
+  Thus, the combination of AST-based entity extraction and the knowledge graph allows for precise query augmentation and a deeper semantic 		understanding of the codebase.
 
 ##### 2. Hybrid Vector Database Indexing
 
