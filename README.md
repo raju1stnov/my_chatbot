@@ -35,11 +35,11 @@ github-chatbot/
 
 ---
 
-## GitHub Chatbot for MLOps Projects
+## AIPlatform Assistant Agent
 
-This document describes the architecture and implementation of a production-oriented chatbot that answers questions by retrieving information from internal GitHub repositories and cloud logging. The system is built to serve MLOps projects, where all knowledge information comes from your repositories (e.g., model registry, data pipelines, SQL conversion tools, document indexing, etc.) and cloud logging for operations assistanance. The solution is designed for developers, architects, and product managers and explains both the high-level design and technical details.
+This document describes the architecture and implementation of a production-oriented agent that answers questions by retrieving information from internal GitHub repositories and cloud logging. The system is built to serve MLOps projects, where all knowledge information comes from your repositories (e.g., model registry, data pipelines, SQL conversion tools, document indexing, etc.) and cloud logging for operations assistanance. The solution is designed for developers, architects, and product managers and explains both the high-level design and technical details.
 
-This system combines two critical MLOps functions in one assistant:
+This system combines two critical AIPlatform functions in one assistant:
 
 1. **Knowledge Assistant**
    Answers technical questions using:
@@ -52,6 +52,30 @@ This system combines two critical MLOps functions in one assistant:
    * SQL generation requests
    * Document processing jobs
    * System health metrics
+
+
+```mermaid
+graph LR
+    A[("👤 User Question")] --> B{{"🦸♂️ AI Platform Assistant"}}
+    B --> C[("📚 Knowledge Magic")]
+    B --> D[("⚙️ Operations Magic")]
+    B --> E[("💰 Cost Magic")]
+    C --> F[("✨ Answer")]
+    D --> F
+    E --> F
+    F --> G[("🎉 Happy User!")]
+
+    style A fill:#D62728,color:white
+    style B fill:#1a73e8,color:white,stroke:#D62728,stroke-width:2px
+    style C fill:#4CAF50,color:white
+    style D fill:#FFC107,color:black
+    style E fill:#9C27B0,color:white
+    style F fill:#D62728,color:white
+    style G fill:#1a73e8,color:white
+  
+    classDef magic stroke-dasharray: 5 5
+    class C,D,E magic
+```
 
 ```mermaid
 flowchart TD
