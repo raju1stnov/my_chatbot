@@ -39,20 +39,29 @@ github-chatbot/
 
 This document describes the architecture and implementation of a production-oriented agent that answers questions by retrieving information from internal GitHub repositories and cloud logging. The system is built to serve MLOps projects, where all knowledge information comes from your repositories (e.g., model registry, data pipelines, SQL conversion tools, document indexing, etc.) and cloud logging for operations assistanance. The solution is designed for developers, architects, and product managers and explains both the high-level design and technical details.
 
-This system combines two critical AIPlatform functions in one assistant:
+This system combines 3 critical AIPlatform functions in one assistant:
 
 1. **Knowledge Assistant**
    Answers technical questions using:
+
    * Code/documentation from GitHub repositories
    * Architectural knowledge graph
    * Vector similarity search
 2. **Operations Assistant**
    Provides real-time insights about:
+
    * Pipeline execution status
    * SQL generation requests
    * Document processing jobs
    * System health metrics
+3. **Cost Assistant**
 
+   Provides real-time insights about:
+
+* token usage
+* cost associatged with a request
+
+## Functional Overview:
 
 ```mermaid
 graph LR
@@ -77,14 +86,16 @@ graph LR
     class C,D,E magic
 ```
 
+## Techical Overview Diagram
+
 ```mermaid
 flowchart TD
-    A[MLPlatform User Questions] --> B[MLOps Assistant/chatbot]
+    A[MLPlatform User Questions] --> B[AIPlatform Agent]
   
     subgraph Bifurcation
         B --> C{Query Type}
-        C -->|"How?" Questions| D[Knowledgebase Assistant]
-        C -->|"Status?" Questions| E[Request State]
+        C -->|"How?" Questions| D[Knowledgebase Agent]
+        C -->|"Status?cost?token" Questions| E[Operations/Cost Agent]
     end
   
     subgraph Knowledgebase_Flow
@@ -107,8 +118,192 @@ flowchart TD
     end
 ```
 
+## **Knowledgebase Flow Diagram**
+
+Below is a sequence diagram showing the end-to-end user interaction with the KnowledgeBase Agent:
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant AIPlatform Agent
+    participant backend
+    participant KnowledgeGraph
+    participant VectorDB
+    participant LLM
+
+    User->>AIPlatform Agent: Enters query "How to trigger model training?"
+    AIPlatform Agent->>backend: POST /query {text: "trigger model training"}  
+  
+    Note over backend,KnowledgeGraph: KG Entity Expansion Example
+    backend->>KnowledgeGraph: Recognize entities: ["model training", "trigger"]<br/>Expand to: ["TrainingPipeline", "CLI command", "config file", "trigger_training()"]
+    KnowledgeGraph-->>backend: Connected entities:<br/>- TrainingPipeline (class)<br/>- train_cli.py (script)<br/>- deployment_config.yaml<br/>- ModelTrainer (service)
+  
+    Note over backend,VectorDB: VectorDB Query Enhancement
+    backend->>VectorDB: Hybrid search for:<br/>"trigger model training" +<br/>KG context: ["TrainingPipeline", "CLI command", "config file"]
+    VectorDB-->>backend: Top matches:<br/>1. CLI docs: "Use `train_cli.py --env prod`" (GitHub)<br/>2. TrainingPipeline class docs (Confluence)<br/>3. deployment_config.yaml example (SharePoint)
+  
+    Note over backend,LLM: LLM Context Enrichment
+    backend->>LLM: Prompt with context:<br/>"User asked: How to trigger model training?<br/>Relevant info:<br/>- CLI script requires env arg<br/>- TrainingPipeline needs config<br/>- Deployment uses YAML settings"
+    LLM-->>backend: Structured response:<br/>"You can trigger training either:<br/>1. Via CLI: `python train_cli.py` (GitHub: train_cli.py)<br/>2. Calling TrainingPipeline.start() with config (Confluence: Training Guide)" 
+  
+    backend-->>AIPlatform Agent: Response with mixed sources
+    AIPlatform Agent->>User: Shows answer with citations:<br/>"Use the CLI tool (GitHub) or..."<br/>Sources: [GitHub, Confluence, SharePoint]
+  
+    User->>AIPlatform Agent: "Which method is recommended for production?"
+    AIPlatform Agent->>backend: Log feedback
+```
+
+---
+
+## **Operations Assistant**
+
+Provides real-time insights about:* Pipeline execution status
+
+* SQL generation requests
+* Document processing jobs
+* System health metrics
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant AIPlatform Agent
+    participant Redis
+    participant BigQuery
+  
+    User->>AIPlatform Agent: "Status of pipeline PCI-1234?"
+    AIPlatform Agent->>Redis: GET status:PCI-1234
+    alt Cache Hit
+        Redis-->>AIPlatform Agent: Return cached data
+    else Cache Miss
+        AIPlatform Agent->>BigQuery: SELECT * FROM logs WHERE pipeline_id = 'PCI-1234' ORDER BY timestamp DESC LIMIT 1
+        BigQuery-->>AIPlatform Agent: Return historical data
+        AIPlatform Agent->>Redis: SET status:PCI-1234
+    end
+    AIPlatform Agent->>LLM: "Generate response with: {status: 'failed', error: 'OOM', docs: '...'}"
+    LLM-->>AIPlatform Agent: "Pipeline failed due to memory limits (ERR-451)..."
+    AIPlatform Agent-->>User: Response with status and docs
+```
+
+#### Flow Diagram with Agentic Approach
+
+```mermaid
+graph TD
+    A[User] --> B{AIPlatform Agent}
+    B --> C[Knowledge Orchestrator Agent]
+    B --> D[Operations Agent]
+    B --> E[Cost Agent]
+  
+    C --> C1[Query Analyzer Agent]
+    C --> C2[Knowledge Retriever Agent]
+    C --> C3[Response Generator Agent]
+  
+    D --> D1[Cache Manager Agent]
+    D --> D2[Log Investigator Agent]
+    D --> D3[Diagnosis Agent]
+  
+    E --> E1[Cost Calculator Agent]
+    E --> E2[Token Analyzer Agent]
+  
+    classDef agent fill:#4CAF50,color:white,stroke:#388E3C
+    class B,C,D,E,C1,C2,C3,D1,D2,D3,E1,E2 agent
+```
+
+
+**Flow Diagram with Agentic Approach for KnowledgeBase search**
+
+```mermaid
+sequenceDiagram
+    %% Left Side (Agents)
+    participant User
+    participant Knowledge Orchestrator
+    participant QueryAnalyzer
+    participant KnowledgeRetriever
+    participant ResponseGenerator
+    participant FeedbackAgent
+
+    %% Right Side (External Systems)
+    participant KnowledgeGraph
+    participant VectorDB
+    participant LLM
+
+    %% Step 1: User asks a question
+    User->>Knowledge Orchestrator: "How to trigger model training?"
+  
+    %% Step 2: Knowledge Orchestrator delegates query analysis
+    Knowledge Orchestrator->>QueryAnalyzer: Analyze intent and extract keywords
+    QueryAnalyzer->>KnowledgeGraph: Recognize entities in query:<br/>"How to trigger model training?"
+    KnowledgeGraph-->>QueryAnalyzer: Recognized entities:<br/>- "model training"<br/>- "trigger"
+    QueryAnalyzer-->>Knowledge Orchestrator: {"type": "knowledge", "priority": "high", "entities": ["model training", "trigger"]}
+
+    %% Step 3: Knowledge Orchestrator triggers KnowledgeRetriever
+    Knowledge Orchestrator->>KnowledgeRetriever: Retrieve context for "trigger model training"
+  
+    %% Step 4: KnowledgeRetriever interacts with KnowledgeGraph for entity expansion
+    KnowledgeRetriever->>KnowledgeGraph: Expand entities: ["model training", "trigger"]<br/>Request connected nodes and relationships
+    KnowledgeGraph-->>KnowledgeRetriever: Expanded context:<br/>- TrainingPipeline (class)<br/>- train_cli.py (script)<br/>- deployment_config.yaml<br/>- ModelTrainer (service)
+
+    %% Step 5: KnowledgeRetriever queries VectorDB with enriched context
+    KnowledgeRetriever->>VectorDB: Hybrid search for:<br/>"trigger model training" +<br/>KG context: ["TrainingPipeline", "CLI command", "config file"]
+    VectorDB-->>KnowledgeRetriever: Top matches:<br/>1. CLI docs (GitHub)<br/>2. TrainingPipeline docs (Confluence)<br/>3. YAML example (SharePoint)
+
+    %% Step 6: KnowledgeRetriever returns enriched context to Knowledge Orchestrator
+    KnowledgeRetriever-->>Knowledge Orchestrator: Context chunks + entities + sources
+
+    %% Step 7: Knowledge Orchestrator delegates response generation
+    Knowledge Orchestrator->>ResponseGenerator: Generate answer using context
+
+    %% Step 8: ResponseGenerator interacts with LLM for structured response
+    ResponseGenerator->>LLM: Prompt with context:<br/>"User asked: How to trigger model training?<br/>Relevant info:<br/>- CLI script requires env arg<br/>- TrainingPipeline needs config<br/>- Deployment uses YAML settings"
+    LLM-->>ResponseGenerator: Structured response with citations
+
+    %% Step 9: ResponseGenerator sends final response to Knowledge Orchestrator
+    ResponseGenerator-->>Knowledge Orchestrator: Final response with citations
+
+    %% Step 10: Knowledge Orchestrator delivers the response to User
+    Knowledge Orchestrator-->>User: Answer with sources:<br/>"Use the CLI tool (GitHub) or..."<br/>Sources: [GitHub, Confluence, SharePoint]
+
+    %% Step 11: User provides feedback to FeedbackAgent
+    User->>FeedbackAgent: 👍/👎
+
+    %% Step 12: FeedbackAgent informs Knowledge Orchestrator about the feedback
+    FeedbackAgent->>Knowledge Orchestrator: Feedback received: 👍/👎
+
+    %% Step 13: Knowledge Orchestrator updates KnowledgeRetriever and ResponseGenerator based on feedback
+    Knowledge Orchestrator->>KnowledgeRetriever: Update retrieval weights based on feedback
+    Knowledge Orchestrator->>ResponseGenerator: Improve response templates based on feedback
+```
+
+
+
+
+**Flow Diagram with Agentic Approach for operational data search**
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Orchestrator
+    participant CacheAgent
+    participant LogAgent
+    participant Diagnostician
+
+    User->>Orchestrator: "Status of PCI-1234?"
+    Orchestrator->>CacheAgent: Check cache
+    alt Cache Hit
+        CacheAgent-->>Orchestrator: Cached status
+    else Cache Miss
+        Orchestrator->>LogAgent: Investigate logs
+        LogAgent->>BigQuery: Query latest
+        LogAgent-->>Orchestrator: Raw log data
+    end
+  
+    Orchestrator->>Diagnostician: Analyze failure
+    Diagnostician->>LLM: "Suggest fixes for OOM error"
+    Diagnostician-->>User: Status + solutions
+    Diagnostician->>KnowledgeGraph: Record new solution
+```
 
 ### **Knowledge Assistant**
+
 Answers technical questions using:* Code/documentation from GitHub repositories
 
 * Architectural knowledge graph
@@ -328,70 +523,6 @@ def answer_question(query, vectorstore, kg_connection):
 
 ---
 
-##### **5. UX Flow Diagram**
-
-Below is a sequence diagram showing the end-to-end user interaction with the chatbot:
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant UI
-    participant Backend
-    participant VectorDB
-    participant KnowledgeGraph
-    participant LLM
-
-    User->>UI: Enters query "How to trigger model training?"
-    UI->>Backend: POST /query {text: "trigger model training", repos: ["mlops-tools"]}
-  
-    Backend->>KnowledgeGraph: Entity recognition and query expansion
-    KnowledgeGraph-->>Backend: Related entities and context
-  
-    Backend->>VectorDB: Find similar chunks (k=5, threshold=0.78)
-    VectorDB-->>Backend: Relevant code/docs chunks
-  
-    Backend->>LLM: Generate response with citations using context from VectorDB and KnowledgeGraph
-    LLM-->>Backend: Formatted answer
-  
-    Backend-->>UI: Streaming response with sources
-    UI->>User: Show answer with sources
-    User->>UI: 👍/👎 Feedback
-    UI->>Backend: Log feedback
-```
-
----
-
-
-
-### **Operations Assistant**
-Provides real-time insights about:* Pipeline execution status
-
-* SQL generation requests
-* Document processing jobs
-* System health metrics
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant Chatbot
-    participant Redis
-    participant BigQuery
-  
-    User->>Chatbot: "Status of pipeline PCI-1234?"
-    Chatbot->>Redis: GET status:PCI-1234
-    alt Cache Hit
-        Redis-->>Chatbot: Return cached data
-    else Cache Miss
-        Chatbot->>BigQuery: SELECT * FROM logs WHERE pipeline_id = 'PCI-1234' ORDER BY timestamp DESC LIMIT 1
-        BigQuery-->>Chatbot: Return historical data
-        Chatbot->>Redis: SET status:PCI-1234
-    end
-    Chatbot->>LLM: "Generate response with: {status: 'failed', error: 'OOM', docs: '...'}"
-    LLM-->>Chatbot: "Pipeline failed due to memory limits (ERR-451)..."
-    Chatbot-->>User: Response with status and docs
-```
-
-
 #### **6. Production-Grade Optimizations**
 
 **Chunking Strategy**
@@ -444,7 +575,7 @@ flowchart TD
 
 #### 8. Why knowledge graph
 
-knowledge graph significantly enhances the chatbot’s capabilities by adding  **contextual understanding** ,  **relationship awareness** , and **semantic reasoning** to complement the vector database (which focuses on semantic similarity). Here’s a detailed breakdown of its role:
+knowledge graph significantly enhances the AIPlatform Agent capabilities by adding  **contextual understanding** ,  **relationship awareness** , and **semantic reasoning** to complement the vector database (which focuses on semantic similarity). Here’s a detailed breakdown of its role:
 
 **1. Solving Complex, Multi-Hop Queries**
 
@@ -483,7 +614,7 @@ flowchart LR
     B -->|defined_in| D[configs/training.yaml]
 ```
 
-* **Action** : The chatbot asks follow-up questions based on graph connections:
+* **Action** : The AIPlatform Agent asks follow-up questions based on graph connections:
   *"Do you mean the `DataPipeline` in `data_processing.py` or the `TrainingPipeline` in `configs/training.yaml`?"*
 
 **3. Query Expansion & Improved Retrieval**
