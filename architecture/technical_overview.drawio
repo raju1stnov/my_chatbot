@@ -1,9 +1,12 @@
-<mxfile host="Electron" modified="2025-03-13T21:27:34.241Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.5.0 Safari/537.36" etag="eiflbZ1TTV1dXAc6VHLF" version="21.6.8" type="device">
+<mxfile host="Electron" modified="2025-03-15T12:55:44.394Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.5.0 Safari/537.36" etag="GsmkLiCBRbB4WvRc1HBw" version="21.6.8" type="device">
   <diagram name="Page-1" id="baFfhMriAgWYs-Ue_QEE">
-    <mxGraphModel dx="1656" dy="818" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2924" dy="2297" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="qeofWkXyxUxeW2VtgWyz-39" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-290" y="-160" width="1990" height="1210" as="geometry" />
+        </mxCell>
         <mxCell id="qeofWkXyxUxeW2VtgWyz-1" value="RequestState_Flow" style="whiteSpace=wrap;strokeWidth=2;verticalAlign=top;" vertex="1" parent="1">
           <mxGeometry x="20" y="520" width="475" height="361" as="geometry" />
         </mxCell>
@@ -26,7 +29,7 @@
           <mxGeometry x="55" y="822" width="133" height="34" as="geometry" />
         </mxCell>
         <mxCell id="qeofWkXyxUxeW2VtgWyz-8" value="Knowledgebase_Flow" style="whiteSpace=wrap;strokeWidth=2;verticalAlign=top;" vertex="1" parent="1">
-          <mxGeometry x="515" y="520" width="763" height="252" as="geometry" />
+          <mxGeometry x="515" y="520" width="785" height="360" as="geometry" />
         </mxCell>
         <mxCell id="qeofWkXyxUxeW2VtgWyz-9" value="VectorDB Search" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="690" y="545" width="134" height="34" as="geometry" />
@@ -49,19 +52,19 @@
         <mxCell id="qeofWkXyxUxeW2VtgWyz-15" value="Service Dependencies" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="1072" y="629" width="171" height="34" as="geometry" />
         </mxCell>
-        <mxCell id="qeofWkXyxUxeW2VtgWyz-16" value="Bifurcation" style="whiteSpace=wrap;strokeWidth=2;verticalAlign=top;" vertex="1" parent="1">
+        <mxCell id="qeofWkXyxUxeW2VtgWyz-16" value="" style="whiteSpace=wrap;strokeWidth=2;verticalAlign=top;" vertex="1" parent="1">
           <mxGeometry x="51" y="104" width="1092" height="366" as="geometry" />
         </mxCell>
         <mxCell id="qeofWkXyxUxeW2VtgWyz-17" value="Query Type" style="rhombus;strokeWidth=2;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry x="713" y="213" width="129" height="129" as="geometry" />
         </mxCell>
-        <mxCell id="qeofWkXyxUxeW2VtgWyz-18" value="MLOps Assistant/chatbot" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+        <mxCell id="qeofWkXyxUxeW2VtgWyz-18" value="AIPlatform Agent" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="681" y="129" width="193" height="34" as="geometry" />
         </mxCell>
-        <mxCell id="qeofWkXyxUxeW2VtgWyz-19" value="Knowledgebase Assistant" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+        <mxCell id="qeofWkXyxUxeW2VtgWyz-19" value="Knowledgebase Agent" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="876" y="411" width="192" height="34" as="geometry" />
         </mxCell>
-        <mxCell id="qeofWkXyxUxeW2VtgWyz-20" value="Request State" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+        <mxCell id="qeofWkXyxUxeW2VtgWyz-20" value="Operations / Cost Agent" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
           <mxGeometry x="228" y="411" width="114" height="34" as="geometry" />
         </mxCell>
         <mxCell id="qeofWkXyxUxeW2VtgWyz-21" value="MLPlatform User Questions" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
@@ -84,7 +87,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="qeofWkXyxUxeW2VtgWyz-25" value="Status? Questions" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.6014950367371577;entryX=0.5050370065789473;entryY=0.00505514705882353;rounded=0;" edge="1" parent="1" source="qeofWkXyxUxeW2VtgWyz-17" target="qeofWkXyxUxeW2VtgWyz-20">
+        <mxCell id="qeofWkXyxUxeW2VtgWyz-25" value="Status? cost ? token ? Questions" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.6014950367371577;entryX=0.5050370065789473;entryY=0.00505514705882353;rounded=0;" edge="1" parent="1" source="qeofWkXyxUxeW2VtgWyz-17" target="qeofWkXyxUxeW2VtgWyz-20">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="286" y="377" />

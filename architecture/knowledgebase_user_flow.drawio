@@ -1,110 +1,273 @@
-<mxfile host="Electron" modified="2025-03-13T21:30:21.922Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.5.0 Safari/537.36" etag="A3s_BrzVJ5t8skSfJzex" version="21.6.8" type="device">
+<mxfile host="Electron" modified="2025-03-17T00:44:51.358Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.5.0 Safari/537.36" etag="ZQ3lqQROUc3c04PA1Xx0" version="21.6.8" type="device">
   <diagram name="Page-1" id="3H5bFyrPO0vVudqeGIyu">
-    <mxGraphModel dx="1338" dy="820" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2074" dy="1197" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="R6qbiqanry6R0RmBPBBe-1" value="User" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;" vertex="1" parent="1">
-          <mxGeometry x="20" y="20" width="150" height="784" as="geometry" />
-        </mxCell>
-        <mxCell id="R6qbiqanry6R0RmBPBBe-2" value="UI" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;" vertex="1" parent="1">
-          <mxGeometry x="413" y="20" width="150" height="784" as="geometry" />
-        </mxCell>
-        <mxCell id="R6qbiqanry6R0RmBPBBe-3" value="Backend" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;" vertex="1" parent="1">
-          <mxGeometry x="950" y="20" width="150" height="784" as="geometry" />
-        </mxCell>
-        <mxCell id="R6qbiqanry6R0RmBPBBe-4" value="VectorDB" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;" vertex="1" parent="1">
-          <mxGeometry x="1311" y="20" width="150" height="784" as="geometry" />
-        </mxCell>
-        <mxCell id="R6qbiqanry6R0RmBPBBe-5" value="KnowledgeGraph" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;" vertex="1" parent="1">
-          <mxGeometry x="1511" y="20" width="150" height="784" as="geometry" />
-        </mxCell>
-        <mxCell id="R6qbiqanry6R0RmBPBBe-6" value="LLM" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;" vertex="1" parent="1">
-          <mxGeometry x="1711" y="20" width="150" height="784" as="geometry" />
-        </mxCell>
-        <mxCell id="R6qbiqanry6R0RmBPBBe-7" value="Enters query &quot;How to trigger model training?&quot;" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-1" target="R6qbiqanry6R0RmBPBBe-2">
+        <mxCell id="R6qbiqanry6R0RmBPBBe-29" value="Analyze intent and extract keywords" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=horizontal;curved=0;rounded=0;fontStyle=1" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="302" y="127" />
+              <mxPoint x="778" y="179" />
             </Array>
+            <mxPoint x="458.5" y="179" as="sourcePoint" />
+            <mxPoint x="1075.5" y="179" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="R6qbiqanry6R0RmBPBBe-8" value="POST /query {text: &quot;trigger model training&quot;, repos: [&quot;mlops-tools&quot;]}" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-2" target="R6qbiqanry6R0RmBPBBe-3">
+        <mxCell id="R6qbiqanry6R0RmBPBBe-30" value="Recognize entities in query:&#xa;&quot;How to trigger model training?&quot;" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="767" y="179" />
+              <mxPoint x="1496" y="252" />
             </Array>
+            <mxPoint x="1075.5" y="252" as="sourcePoint" />
+            <mxPoint x="1895.5" y="252" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="R6qbiqanry6R0RmBPBBe-9" value="Entity recognition and query expansion" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-3" target="R6qbiqanry6R0RmBPBBe-5">
+        <mxCell id="R6qbiqanry6R0RmBPBBe-31" value="Recognized entities:&#xa;- &quot;model training&quot;&#xa;- &quot;trigger&quot;" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1316" y="231" />
+              <mxPoint x="1496" y="346" />
             </Array>
+            <mxPoint x="1895.5" y="346" as="sourcePoint" />
+            <mxPoint x="1075.5" y="346" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="R6qbiqanry6R0RmBPBBe-10" value="Related entities and context" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-5" target="R6qbiqanry6R0RmBPBBe-3">
+        <mxCell id="R6qbiqanry6R0RmBPBBe-32" value="{&quot;type&quot;: &quot;knowledge&quot;, &quot;priority&quot;: &quot;high&quot;, &quot;entities&quot;: [&quot;model training&quot;, &quot;trigger&quot;]}" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1316" y="283" />
+              <mxPoint x="778" y="398" />
             </Array>
+            <mxPoint x="1075.5" y="398" as="sourcePoint" />
+            <mxPoint x="458.5" y="398" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="R6qbiqanry6R0RmBPBBe-11" value="Find similar chunks (k=5, threshold=0.78)" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-3" target="R6qbiqanry6R0RmBPBBe-4">
+        <mxCell id="R6qbiqanry6R0RmBPBBe-33" value="Retrieve context for &quot;trigger model training&quot;" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1216" y="335" />
+              <mxPoint x="880" y="450" />
             </Array>
+            <mxPoint x="458.5" y="450" as="sourcePoint" />
+            <mxPoint x="1281" y="450" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="R6qbiqanry6R0RmBPBBe-12" value="Relevant code/docs chunks" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-4" target="R6qbiqanry6R0RmBPBBe-3">
+        <mxCell id="R6qbiqanry6R0RmBPBBe-34" value="Expand entities: [&quot;model training&quot;, &quot;trigger&quot;]&#xa;Request connected nodes and relationships" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1216" y="387" />
+              <mxPoint x="1599" y="523" />
             </Array>
+            <mxPoint x="1281" y="523" as="sourcePoint" />
+            <mxPoint x="1895.5" y="523" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="R6qbiqanry6R0RmBPBBe-13" value="Generate response with citations using context from VectorDB and KnowledgeGraph" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-3" target="R6qbiqanry6R0RmBPBBe-6">
+        <mxCell id="R6qbiqanry6R0RmBPBBe-35" value="Expanded context:&#xa;- TrainingPipeline (class)&#xa;- train_cli.py (script)&#xa;- deployment_config.yaml&#xa;- ModelTrainer (service)" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1416" y="439" />
+              <mxPoint x="1599" y="659" />
             </Array>
+            <mxPoint x="1895.5" y="659" as="sourcePoint" />
+            <mxPoint x="1281" y="659" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="R6qbiqanry6R0RmBPBBe-14" value="Formatted answer" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-6" target="R6qbiqanry6R0RmBPBBe-3">
+        <mxCell id="R6qbiqanry6R0RmBPBBe-36" value="Hybrid search for:&#xa;&quot;trigger model training&quot; +&#xa;KG context: [&quot;TrainingPipeline&quot;, &quot;CLI command&quot;, &quot;config file&quot;]" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1416" y="491" />
+              <mxPoint x="1699" y="753" />
             </Array>
+            <mxPoint x="1281" y="753" as="sourcePoint" />
+            <mxPoint x="2095.5" y="753" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="R6qbiqanry6R0RmBPBBe-15" value="Streaming response with sources" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-3" target="R6qbiqanry6R0RmBPBBe-2">
+        <mxCell id="R6qbiqanry6R0RmBPBBe-37" value="Top matches:&#xa;1. CLI docs (GitHub)&#xa;2. TrainingPipeline docs (Confluence)&#xa;3. YAML example (SharePoint)" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="767" y="543" />
+              <mxPoint x="1699" y="868" />
             </Array>
+            <mxPoint x="2095.5" y="868" as="sourcePoint" />
+            <mxPoint x="1281" y="868" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="R6qbiqanry6R0RmBPBBe-16" value="Show answer with sources" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-2" target="R6qbiqanry6R0RmBPBBe-1">
+        <mxCell id="R6qbiqanry6R0RmBPBBe-38" value="Context chunks + entities + sources" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="302" y="595" />
+              <mxPoint x="880" y="920" />
             </Array>
+            <mxPoint x="1281" y="920" as="sourcePoint" />
+            <mxPoint x="458.5" y="920" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="R6qbiqanry6R0RmBPBBe-17" value="👍/👎 Feedback" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-1" target="R6qbiqanry6R0RmBPBBe-2">
+        <mxCell id="R6qbiqanry6R0RmBPBBe-39" value="Generate answer using context" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="302" y="647" />
+              <mxPoint x="985" y="972" />
             </Array>
+            <mxPoint x="458.5" y="972" as="sourcePoint" />
+            <mxPoint x="1491" y="972" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="R6qbiqanry6R0RmBPBBe-18" value="Log feedback" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-2" target="R6qbiqanry6R0RmBPBBe-3">
+        <mxCell id="R6qbiqanry6R0RmBPBBe-40" value="Prompt with context:&#xa;&quot;User asked: How to trigger model training?&#xa;Relevant info:&#xa;- CLI script requires env arg&#xa;- TrainingPipeline needs config&#xa;- Deployment uses YAML settings&quot;" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="767" y="699" />
+              <mxPoint x="1904" y="1129" />
             </Array>
+            <mxPoint x="1491" y="1129" as="sourcePoint" />
+            <mxPoint x="2295.5" y="1129" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-41" value="Structured response with citations" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1904" y="1181" />
+            </Array>
+            <mxPoint x="2295.5" y="1181" as="sourcePoint" />
+            <mxPoint x="1491" y="1181" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-42" value="Final response with citations" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="985" y="1233" />
+            </Array>
+            <mxPoint x="1491" y="1233" as="sourcePoint" />
+            <mxPoint x="458.5" y="1233" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-43" value="Answer with sources:&#xa;&quot;Use the CLI tool (GitHub) or...&quot;&#xa;Sources: [GitHub, Confluence, SharePoint]" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="287" y="1327" />
+            </Array>
+            <mxPoint x="458.5" y="1327" as="sourcePoint" />
+            <mxPoint x="94.5" y="1327" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-44" value="👍/👎" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="906" y="1379" />
+            </Array>
+            <mxPoint x="94.5" y="1379" as="sourcePoint" />
+            <mxPoint x="1695.5" y="1379" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-45" value="Feedback received: 👍/👎" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1088" y="1431" />
+            </Array>
+            <mxPoint x="1695.5" y="1431" as="sourcePoint" />
+            <mxPoint x="458.5" y="1431" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-46" value="Update retrieval weights based on feedback" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="880" y="1483" />
+            </Array>
+            <mxPoint x="458.5" y="1483" as="sourcePoint" />
+            <mxPoint x="1281" y="1483" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-47" value="Improve response templates based on feedback" style="verticalAlign=bottom;endArrow=block;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="985" y="1535" />
+            </Array>
+            <mxPoint x="458.5" y="1535" as="sourcePoint" />
+            <mxPoint x="1491" y="1535" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-50" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;endArrow=none;endFill=0;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-48" target="R6qbiqanry6R0RmBPBBe-49">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-48" value="User" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="20" width="130" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-49" value="User" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="1650" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-55" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;endArrow=none;endFill=0;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-51" target="R6qbiqanry6R0RmBPBBe-53">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-51" value="Knowledge Orchestrator" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="365" y="21" width="187" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-53" value="Knowledge Orchestrator" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="365.5" y="1650" width="187" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-56" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-54">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="90" y="130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-57" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-54">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="460" y="130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-54" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 11px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;&lt;b&gt;&quot;How to trigger model training?&quot;&lt;/b&gt;&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="110" width="190" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-60" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=none;endFill=0;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-58" target="R6qbiqanry6R0RmBPBBe-59">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-58" value="QueryAnalyzer" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="18" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-59" value="QueryAnalyzer" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="1650" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-63" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-61" target="R6qbiqanry6R0RmBPBBe-62">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-61" value="KnowledgeRetriever" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1201" y="18" width="159" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-62" value="KnowledgeRetriever" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1202" y="1650" width="159" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-66" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=none;endFill=0;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-64" target="R6qbiqanry6R0RmBPBBe-65">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-64" value="ResponseGenerator" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1412" y="20" width="159" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-65" value="ResponseGenerator" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1412" y="1650" width="159" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-69" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=none;endFill=0;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-67" target="R6qbiqanry6R0RmBPBBe-68">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-67" value="FeedbackAgent" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1620" y="20" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-68" value="ResponseGenerator" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1620" y="1650" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-72" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;endArrow=none;endFill=0;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-70" target="R6qbiqanry6R0RmBPBBe-71">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-70" value="KnowledgeGraph" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1821" y="18" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-71" value="KnowledgeGraph" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1822" y="1650" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-75" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=none;endFill=0;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-73" target="R6qbiqanry6R0RmBPBBe-74">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-73" value="VectorDB" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2021" y="20" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-74" value="VectorDB" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2021" y="1650" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-78" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=none;endFill=0;" edge="1" parent="1" source="R6qbiqanry6R0RmBPBBe-76" target="R6qbiqanry6R0RmBPBBe-77">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-76" value="LLM" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2221" y="21" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="R6qbiqanry6R0RmBPBBe-77" value="LLM" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2221" y="1650" width="150" height="70" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
