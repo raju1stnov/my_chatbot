@@ -1,37 +1,22 @@
 github-chatbot/
-├── app/
-│   ├── api/                     # FastAPI endpoints
-│   │   ├── __init__.py
-│   │   ├── endpoints.py         # API routes for querying
-│   ├── core/                    # Core logic
-│   │   ├── __init__.py
-│   │   ├── ingestion.py         # Repo cloning and preprocessing
-│   │   ├── vector_db.py         # Vector DB creation and management
-│   │   ├── knowledge_graph.py   # Knowledge graph construction
-│   │   ├── query_processing.py  # Query handling and LLM integration
-│   ├── models/                  # Pydantic models for API
-│   │   ├── __init__.py
-│   │   ├── schemas.py           # Request/response models
-│   ├── utils/                   # Utility functions
-│   │   ├── __init__.py
-│   │   ├── logger.py            # Logging setup
-│   │   ├── config.py            # Configuration loader
-│   ├── main.py                  # FastAPI app entrypoint
-├── data/                        # Local storage for repos and indexes
-│   ├── repos/                   # Cloned GitHub repositories
-│   ├── chroma_db/               # Vector DB storage
-│   ├── neo4j/                   # Knowledge graph storage
-├── tests/                       # Unit and integration tests
-│   ├── __init__.py
-│   ├── test_ingestion.py
-│   ├── test_query_processing.py
-├── docker-compose.yml           # Docker setup for all services
-├── Dockerfile                   # Dockerfile for FastAPI app
-├── requirements.txt             # Python dependencies
-├── README.md                    # Project documentation
-├── .env                         # Environment variables
+..
+├── api/
+│   ├── main.py
+│   ├── agents/
+│   │   ├── orchestrator.py
+│   │   ├── query_analyzer.py
+│   │   └── retriever.py
+├── frontend/
+│   ├── app.py
+│   └── requirements.txt
+├── docker-compose.yml
+└── Dockerfile
 
-**Detailed flow diagrams, system components, and optimizations for multiple repos:**
+steps :-
+
+1. pip install gitpython py2neo sentence-transformers chromadb
+2. docker run -d --name neo4j -p 7474:7474 -p 7687:7687 -e NEO4J_AUTH=neo4j/password neo4j:latest
+3. python data_ingestion.py
 
 ---
 
@@ -208,7 +193,6 @@ graph TD
     class B,C,D,E,C1,C2,C3,D1,D2,D3,E1,E2 agent
 ```
 
-
 **Flow Diagram with Agentic Approach for KnowledgeBase search**
 
 ```mermaid
@@ -273,9 +257,6 @@ sequenceDiagram
     Knowledge Orchestrator->>ResponseGenerator: Improve response templates based on feedback
 ```
 
-
-
-
 **Flow Diagram with Agentic Approach for operational data search**
 
 ```mermaid
@@ -301,6 +282,232 @@ sequenceDiagram
     Diagnostician-->>User: Status + solutions
     Diagnostician->>KnowledgeGraph: Record new solution
 ```
+
+#### **Cost Prediction/comparision/Anomoly/ recommendation WorkFlow**
+
+##### Cost Prediction Flow Diagram
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Orchestrator
+    participant CacheAgent
+    participant LogAgent
+    participant BigQuery
+    participant Diagnostician
+
+    User->>Orchestrator: "What will SQLGEN-789 cost?"
+    Orchestrator->>CacheAgent: Check cached prediction
+    alt Cache Hit
+        CacheAgent-->>Orchestrator: Return cached estimate
+    else Cache Miss
+        Orchestrator->>LogAgent: Get request parameters
+        LogAgent->>BigQuery: 
+        note right of BigQuery: Query Pattern<br/>SELECT features<br/>FROM cost_data<br/>WHERE request_type='SQLGEN'<br/>AND docs_size > 40GB<br/>ORDER BY timestamp DESC LIMIT 100
+        BigQuery-->>LogAgent: Historical patterns
+        LogAgent->>BigQuery: 
+        note right of BigQuery: ML.PREDICT(MODEL cost_model,<br/>{{request_features}})
+        BigQuery-->>LogAgent: Predicted cost
+        LogAgent-->>Orchestrator: Raw cost data + prediction
+        Orchestrator->>CacheAgent: Cache prediction(expiry=1h)
+    end
+    Orchestrator->>Diagnostician: "Format cost explanation"
+    Diagnostician->>LLM: "Convert ${4.50±0.30} to business terms"
+    LLM-->>Diagnostician: "Estimated cost: $4.50 (likely between $4.20-$4.80)"
+    Diagnostician-->>User: Formatted response
+```
+
+###### **Cost Prediction Flow Breakdown**
+
+**Step 1** : Dummy schema
+
+```sql
+CREATE TABLE cost_data (
+  request_id STRING,
+  request_type STRING,
+  docs_size FLOAT64,  -- in GB
+  duration FLOAT64,   -- in seconds
+  actual_cost FLOAT64
+);
+```
+
+**Step 2** :Sample Data
+
+```sql
+INSERT INTO cost_data VALUES
+('SQL-001', 'SQL_GEN', 30.5, 120, 0.45),
+('SQL-002', 'SQL_GEN', 45.0, 180, 0.68),
+('SQL-003', 'DOC_SEARCH', 120.0, 300, 1.20);
+```
+
+**Step 3** : Model creation
+
+```sql
+CREATE MODEL cost_model
+OPTIONS(MODEL_TYPE='BOOSTED_TREE_REGRESSOR',
+        INPUT_LABEL_COLS=['actual_cost']) AS
+SELECT
+  request_type,
+  docs_size,
+  duration,
+  actual_cost
+FROM cost_data;
+```
+
+**Step 4** : Live Prediction
+
+```sql
+SELECT
+  ML.PREDICT(MODEL cost_model,
+    STRUCT(
+      'SQL_GEN' AS request_type,
+      45.0 AS docs_size,
+      150 AS duration
+    )
+  ) AS predicted_cost;
+```
+
+**Output**
+
+```json
+{
+  "predicted_cost": 0.62,
+  "confidence_interval": [0.58, 0.66]
+}
+```
+
+##### **Cost Anomoly/recommendation Flow diagram**
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Orchestrator
+    participant CacheAgent
+    participant LogAgent
+    participant BigQuery
+    participant Diagnostician
+
+    User->>Orchestrator: "SQL_GEN costs last month?"
+    Orchestrator->>CacheAgent: Check cached report
+    alt Cache Hit
+        CacheAgent-->>Orchestrator: Return cached analysis
+    else Cache Miss
+        Orchestrator->>LogAgent: Analyze cost patterns
+        LogAgent->>BigQuery: Get raw cost data
+        BigQuery-->>LogAgent: 
+        note left of BigQuery: 1. Base Costs<br/>2. Peer Comparison<br/>3. Trend Analysis
+        LogAgent->>BigQuery: Calculate insights
+        BigQuery-->>LogAgent: 
+        note left of BigQuery: ML.ANALYZE_MODEL<br/>FORECAST,<br/>ANOMALY DETECTION
+        LogAgent-->>Orchestrator: Raw insights
+        Orchestrator->>CacheAgent: Cache report(expiry=6h)
+    end
+    Orchestrator->>Diagnostician: "Format insights"
+    Diagnostician->>LLM: 
+        note right of LLM: Convert data to narrative<br/>with recommendations
+    LLM-->>Diagnostician: Natural language report
+    Diagnostician-->>User: Formatted response with actions
+```
+
+###### **Cost anaomoly - Example Scenario** : Analyzing DOC_SEARCH costs for anomaly detection
+
+```sql
+CREATE TABLE cost_data (
+  request_id STRING,
+  request_type STRING,
+  docs_size FLOAT64,  -- in GB
+  duration FLOAT64,   -- in seconds
+  actual_cost FLOAT64
+);
+```
+
+**Dummy Data**
+
+```sql
+INSERT INTO cost_data VALUES
+('DOC-001', 'DOC_SEARCH', 50.0, 200, 0.80),
+('DOC-002', 'DOC_SEARCH', 55.0, 210, 0.85),
+('DOC-003', 'DOC_SEARCH', 300.0, 1200, 5.00);  -- Anomaly
+```
+
+**Analysis Query** :
+
+```sql
+SELECT
+  ML.ANALYZE_MODEL(MODEL cost_model,
+    STRUCT(
+      'ANOMALY_DETECTION' AS analysis_type,
+      0.95 AS anomaly_prob_threshold
+    )
+  ) AS analysis_result
+FROM cost_data
+WHERE request_type = 'DOC_SEARCH';
+```
+
+**Output** :
+
+```json
+{
+  "anomalies": [
+    {
+      "request_id": "DOC-003",
+      "actual_cost": 5.00,
+      "predicted_cost": 1.20,
+      "anomaly_score": 0.97,
+      "reason": "High docs_size to cost ratio"
+    }
+  ],
+  "trends": {
+    "avg_cost_per_gb": 0.016,
+    "cost_increase_last_month": "15%"
+  }
+}
+```
+
+###### **Recommendation Engine Integration**
+
+****1. Recommendation Rules Table** :**
+
+```sql
+CREATE TABLE cost_recommendations (
+  request_type STRING,
+  cost_threshold FLOAT64,
+  recommendation STRING,
+  severity STRING
+);
+
+INSERT INTO cost_recommendations VALUES
+('SQL_GEN', 0.50, 'Optimize query patterns', 'medium'),
+('DOC_SEARCH', 1.00, 'Enable compression', 'high');
+```
+
+**2. Recommendation Query**
+
+```python
+SELECT
+  request_id,
+  actual_cost,
+  recommendation
+FROM cost_data cd
+JOIN cost_recommendations cr
+  ON cd.request_type = cr.request_type
+  AND cd.actual_cost > cr.cost_threshold
+WHERE cd.request_type = 'DOC_SEARCH';
+```
+
+**3.** **Output**
+
+```json
+[
+  {
+    "request_id": "DOC-003",
+    "actual_cost": 5.00,
+    "recommendation": "Enable compression",
+    "severity": "high"
+  }
+]
+```
+
 
 ### **Knowledge Assistant**
 
