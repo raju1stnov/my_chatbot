@@ -1,5 +1,4 @@
 github-chatbot/
-..
 ├── api/
 │   ├── main.py
 │   ├── agents/
