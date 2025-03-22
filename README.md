@@ -426,7 +426,7 @@ CREATE TABLE cost_data (
 INSERT INTO cost_data VALUES
 ('DOC-001', 'DOC_SEARCH', 50.0, 200, 0.80),
 ('DOC-002', 'DOC_SEARCH', 55.0, 210, 0.85),
-('DOC-003', 'DOC_SEARCH', 300.0, 1200, 5.00);  -- Anomaly
+('DOC-003', 'DOC_SEARCH', 300.0, 1200, 10.00);  -- Anomaly
 ```
 
 **Analysis Query** :
@@ -450,16 +450,15 @@ WHERE request_type = 'DOC_SEARCH';
   "anomalies": [
     {
       "request_id": "DOC-003",
-      "actual_cost": 5.00,
-      "predicted_cost": 1.20,
+      "actual_cost": 10.00,
+      "predicted_cost": 4.80,
       "anomaly_score": 0.97,
-      "reason": "High docs_size to cost ratio"
+      "reason": "Actual cost is 2.08x higher than predicted for the given size and duration."
     }
   ],
   "trends": {
     "avg_cost_per_gb": 0.016,
-    "cost_increase_last_month": "15%"
-  }
+    "cost_increase_last_month": "1076.47%",  // Month 2 → Month 3  }
 }
 ```
 
@@ -506,7 +505,6 @@ WHERE cd.request_type = 'DOC_SEARCH';
   }
 ]
 ```
-
 
 ### **Knowledge Assistant**
 
