@@ -1,5 +1,227 @@
 
 
+
+
+### MCP server inclusion
+
+Modern AI **agents** often combine multiple tools and data services to accomplish complex tasks. In our scenario, we have both prebuilt AI assistants (e.g. a Knowledge Assistant built on LangGraph, a Security Assistant on CrewAI) and standalone microservices providing specific capabilities (e.g. a BigQuery query service, a web browsing service, an authentication service). The goal is to treat all these components as *first-class agents* in a unified architecture. This means exposing them through a single **Agent Registry** (for discovery) and an **Agent Gateway** (for invocation) with a common interface and metadata. By standardizing how agents and services are registered and invoked, we eliminate custom one-off integrations and achieve a modular, scalable system [dev.to](https://dev.to/sudhakar_punniyakotti/mcp-the-api-gateway-for-ai-agents-4ldn#:~:text=Inspired%20by%20microservices%20architecture%2C%20MCP,integrate%20seamlessly%20into%20broader%20workflows)[huggingface.co](https://huggingface.co/blog/Kseniase/mcp#:~:text=It%E2%80%99s%20important%20to%20highlight%20again,are%20called%20and%20information%20exchanged) . In this architecture, an AI agent can seamlessly discover and call any tool or service via a common protocol, much like plugging into a universal API **gateway**[huggingface.co](https://huggingface.co/blog/Kseniase/mcp#:~:text=It%20is%20akin%20to%20a,sophisticated%20tasks%20across%20diverse%20contexts) The unified approach has several benefits:
+
+* **Dynamic discovery:** New services or agents can be introduced and immediately discovered by others without hardcoding (thanks to a central registry) [huggingface.co](https://huggingface.co/blog/Kseniase/mcp#:~:text=One%20striking%20feature%20is%20MCP%E2%80%99s,a%20standardized%20API%2C%20offering%20flexibility).
+* **Modularity:** Each capability (whether a full agent or a single service) is a self-contained microservice that can be developed, deployed, and scaled independently [dev.to](https://dev.to/sudhakar_punniyakotti/mcp-the-api-gateway-for-ai-agents-4ldn#:~:text=Inspired%20by%20microservices%20architecture%2C%20MCP,integrate%20seamlessly%20into%20broader%20workflows).
+* **Unified access:** Clients (end-users or applications) have a single entry point (Agent Gateway) to interact with any agent or service, simplifying integration.
+* **Flexible composition:** Developers or even business users can compose new agents by wiring together existing services or agents via code or a visual builder, leveraging the common interface.
+
+Below we present an updated architecture diagram and a detailed explanation of each layer, the flows for agent creation and usage, environment management, and key design considerations.
+
+```mermaid
+graph LR
+    %% Define subgraphs for logical grouping
+    subgraph Client_Frontend [Client Interfaces]
+        userUI["`End User (App/Chat UI)`"] -- "invoke agent/service" --> Gateway
+        builderUI["`Business User (Low-Code Builder)`"] -- "configure new agent" --> Composer
+        devClient["`Developer (Code/SDK)`"] -- "deploy via CI/CD" --> CI/CD
+    end
+  
+    subgraph Core_Platform [Agent Gateway & Registry]
+        Gateway(Agent Gateway)
+        Registry[[Agent Registry]]
+    end
+  
+    subgraph Services [Agents & MCP Services]
+        KA["`Knowledge Assistant<br/>(LangGraph agent)`"]
+        SA["`Security Assistant<br/>(CrewAI agent)`"]
+        HR["`HR Recruitment Assistant<br/>(Composed agent)`"]
+        BQS["`BigQueryService<br/>(MCP service)`"]
+        WS["`WebService<br/>(MCP service)`"]
+        AS["`AuthService<br/>(MCP service)`"]
+    end
+  
+    %% Registry registrations
+    KA -- "register" --> Registry
+    SA -- "register" --> Registry
+    BQS -- "register" --> Registry
+    WS -- "register" --> Registry
+    AS -- "register" --> Registry
+    HR -- "register" --> Registry
+  
+    %% Composition flows
+    Composer -- "uses available services" --> Registry
+    Composer -- "define workflow" --> HR
+    CI/CD -- "build & deploy code" --> HR
+    HR -- "internal calls" --> AS
+    HR -- "internal calls" --> BQS
+    KA -- "internal calls" --> WS
+  
+    %% Invocation routing
+    Gateway -- "route to agent" --> KA
+    Gateway -- "route to agent" --> SA
+    Gateway -- "route to new agent" --> HR
+    Gateway -- "route to service" --> BQS
+  
+    %% Registry lookup for routing
+    Gateway -- "lookup endpoint" --> Registry
+
+```
+
+
+### Why Is MCP Better Than Just a Service?
+
+| Feature                  | Normal API               | MCP Server                                         |
+| ------------------------ | ------------------------ | -------------------------------------------------- |
+| Discovery                | Manual (docs, hardcoded) | ✅ Self-describing via `/tools`                  |
+| Integration by Agents    | Manual coding per tool   | ✅ Auto-wired by LangGraph, CrewAI                 |
+| Standard Tool Schema     | ❌ Inconsistent          | ✅ JSON input/output with examples                 |
+| Registry compatibility   | ❌ No formal model       | ✅ Can be registered & discovered                  |
+| Dynamic Composition      | ❌ Not easily composable | ✅ Agents build workflows dynamically              |
+| LLM Readiness (tool use) | ❌ Prompt hack needed    | ✅ Plug-and-play with tool calling                 |
+| Reusability              | Manual API doc           | ✅ Self-documenting + reuse by agents              |
+| Framework Agnostic       | Usually tied to impl     | ✅ Can be used from any framework via standard API |
+
+
+**What Makes a Service an MCP Server?**
+
+A **normal API service** (e.g., `/run_query`, `/get_user`) exposes endpoints, but:
+
+* It **lacks structured discovery** — other agents/tools don’t know what it can do unless hardcoded.
+* There’s **no shared contract** or handshake between agents and services.
+* It can’t be composed automatically — unless you write a wrapper or adapter every time.
+
+An  **MCP server** , on the other hand:
+
+* Exposes **a machine-readable schema** (`GET /tools`) that lists all the actions (functions/tools) it can perform.
+* Each tool/action includes: name, description (for the LLM), input/output schemas, examples — so an LLM agent (or orchestration platform) can **auto-discover, auto-plan, and invoke** the tools.
+* Follows a **standard interface contract** (like OpenAPI for LLM tool use) — consistent across all services.
+* Enables **dynamic registration and chaining** — agents can load its capabilities and use them like plugins.
+
+
+### FastAPI Example: BigQuery MCP Server
+
+Let’s write a **simplified FastAPI-based MCP server** called `BigQueryMCPServer`.
+
+
+```python
+# bigquery_mcp_server.py
+from fastapi import FastAPI, Request
+from pydantic import BaseModel
+from typing import List, Dict
+
+app = FastAPI(title="BigQuery MCP Server")
+
+# 1. This defines the tool interface
+class RunQueryInput(BaseModel):
+    query: str
+
+class RunQueryOutput(BaseModel):
+    rows: List[Dict]
+
+# 2. The main tool execution endpoint
+@app.post("/run_query", response_model=RunQueryOutput)
+async def run_query(input: RunQueryInput):
+    # Simulate BigQuery response (replace with real query logic)
+    print(f"Running: {input.query}")
+    return RunQueryOutput(rows=[{"region": "X", "sales": 5200000}])
+
+# 3. MCP discovery endpoint (this is what makes it an MCP server)
+@app.get("/tools")
+async def list_tools():
+    return {
+        "tools": [
+            {
+                "name": "run_query",
+                "description": "Run a SQL query on BigQuery and return rows.",
+                "input_schema": RunQueryInput.schema(),
+                "output_schema": RunQueryOutput.schema(),
+                "examples": [
+                    {
+                        "input": {"query": "SELECT * FROM sales"},
+                        "output": {"rows": [{"region": "X", "sales": 5200000}]}
+                    }
+                ]
+            }
+        ]
+    }
+
+```
+
+
+How Do Agents Use It?
+
+Let’s say you have a **LangGraph agent** that connects to the registry, reads the `/tools` from `BigQueryService`, and gets:
+
+```json
+{
+  "name": "run_query",
+  "description": "Run a SQL query on BigQuery and return rows.",
+  "input_schema": { "query": "string" },
+  "output_schema": { "rows": [{ "region": "X", "sales": 5200000 }] }
+}
+
+```
+
+It registers that as a  **tool in the agent runtime** , and the LLM can now invoke:
+
+```json
+{
+  "tool": "run_query",
+  "args": { "query": "SELECT * FROM sales WHERE region = 'X'" }
+}
+
+```
+
+That’s how  **MCP bridges AI agents and backend services** . It  **removes glue code** , makes your services  **composable** , and aligns with **tool-use-by-LLM** standards — especially helpful in agentic platforms like LangGraph, Autogen, CrewAI.
+
+
+
+
+```mermaid
+flowchart TD
+    subgraph UI
+        U((User)) -->|Chat| GW[API Gateway]
+    end
+
+    subgraph Orchestration
+        GW --> ORCH[Platform Orchestrator Agent]
+        ORCH -->|session| Redis[(Redis)]
+        ORCH -->|route request| AG[Agent Gateway]
+    end
+
+    subgraph Agent Framework Layer
+        AG -->|standard API| ADAPTER_LG[LangGraph Adapter]
+        AG -->|standard API| ADAPTER_CR[CrewAI Adapter]
+        AG -->|standard API| ADAPTER_X[Future Adapter]
+      
+        ADAPTER_LG --> KNOW["Knowledge Assistant"]
+        ADAPTER_LG --> AUTH["Auth Assistant"]
+        ADAPTER_LG --> LLMGEN[LLM Response Generator]
+      
+        ADAPTER_CR --> SEC["Security Assistant (CrewAI)"]
+    end
+
+    subgraph MCP_Servers
+        KNOW -->|context: knowledge| MCP_KNOW[MCP Server - Knowledge]
+        AUTH -->|context: authz/authn| MCP_AUTH[MCP Server - Auth]
+        SEC -->|context: security| MCP_SEC[MCP Server - Security]
+        LLMGEN -->|context: prompt/style/llm| MCP_LLM[MCP Server - LLM Config]
+        ORCH -->|context: user_profile| MCP_ORCH[MCP Server - Session/User]
+
+        MCP_KNOW --> KG[Knowledge Graph]
+        MCP_KNOW --> VDB[Vector DB]
+        MCP_AUTH --> Ping[PingFederate]
+        MCP_AUTH --> GAuth[Google OAuth]
+        MCP_SEC --> CSPM[CSPM Tools]
+        MCP_SEC --> Vuln[[Vulnerability DB]]
+        MCP_LLM --> OpenAI
+        MCP_LLM --> Gemini
+        MCP_LLM --> Anthropic
+    end
+
+    classDef box fill:#f0f8ff,stroke:#0366d6;
+    classDef gateway fill:#e6ffe6,stroke:#4CAF50;
+    class AG gateway;
+    class KNOW,AUTH,LLMGEN,SEC box;
+    class MCP_KNOW,MCP_AUTH,MCP_LLM,MCP_ORCH,MCP_SEC box;
+```
+
 ### Comparision of Agent Framework
 
 Below is a tabulated comparison for clarity, focusing on the top five features:
@@ -40,7 +262,7 @@ The comparison table between **Hierarchical Multi-Agent** and other architecture
 
 **Hierarchical Multi-Agent** is ideal for your enterprise platform as it provides clear modularity, scalability, easier debugging, and explicit control of context across specialized agents.
 
-The proposed design is very much in line with emerging industry practices. For instance, LinkedIn’s AI recruiter system uses a hierarchical agent system with LangGraph – breaking down conversational search and matching into multiple layers of agents[langchain.com](https://www.langchain.com/built-with-langgraph#:~:text=AI%20that%20hires%20top%20talent) . Similarly, other companies have found that a network of specialized agents can outperform a single monolithic agent for complex workflows.
+The proposed design is very much in line with emerging industry practices. For instance, LinkedIn’s AI recruiter system uses a hierarchical agent system with LangGraph – breaking down conversational search and matching into multiple layers of agents [langchain.com](https://www.langchain.com/built-with-langgraph#:~:text=AI%20that%20hires%20top%20talent) . Similarly, other companies have found that a network of specialized agents can outperform a single monolithic agent for complex workflows.
 
 
 ### Platform Orchestrator (Router)
