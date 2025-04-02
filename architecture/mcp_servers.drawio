@@ -1,0 +1,134 @@
+<mxfile host="Electron" modified="2025-04-02T15:11:59.655Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.5.0 Safari/537.36" etag="o0MbeyUbridLf2BfvOiE" version="21.6.8" type="device">
+  <diagram name="Page-1" id="E1aJi_Tpna0-vAiPolDU">
+    <mxGraphModel dx="1434" dy="836" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-37" value="Kubernetes Cluster" style="whiteSpace=wrap;strokeWidth=2;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="971" y="409" width="527" height="362" as="geometry" />
+        </mxCell>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-38" value="WebService&#xa;(FastAPI Microservice)" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1295" y="444" width="161" height="51" as="geometry" />
+        </mxCell>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-39" value="BigQueryService&#xa;(FastAPI Microservice)" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1278" y="545" width="195" height="51" as="geometry" />
+        </mxCell>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-40" value="AuthService&#xa;(FastAPI Microservice)" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1294" y="646" width="164" height="51" as="geometry" />
+        </mxCell>
+        <UserObject label="HRRecruitingAssistant Agent&#xa;(FastAPI Microservice)" link="Description: User-created agent microservice that orchestrates calls to WebService and BigQueryService" id="Thbh-QFBYTHm9kd9v6Cp-41">
+          <mxCell style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+            <mxGeometry x="996" y="536" width="172" height="69" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-42" value="User Environment" style="whiteSpace=wrap;strokeWidth=2;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="1915" height="233" as="geometry" />
+        </mxCell>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-43" value="User (Agent Developer)" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="45" y="92" width="182" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-44" value="Low-Code Builder / SDK" style="whiteSpace=wrap;strokeWidth=2;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="439" y="97" width="295" height="104" as="geometry" />
+        </mxCell>
+        <UserObject label="Registry Service&#xa;(/tools API)" link="Description: Central /tools endpoint that queries Cloud Spanner for tool registry" id="Thbh-QFBYTHm9kd9v6Cp-45">
+          <mxCell style="strokeWidth=2;shape=process;whiteSpace=wrap;size=0.04;" vertex="1" parent="1">
+            <mxGeometry x="1679" y="108" width="231" height="34" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-46" value="CrewAI / LangGraph Framework" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="464" y="132" width="245" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-47" value="Cloud Spanner&#xa;Registry" style="shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;strokeWidth=2;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="1316" y="288" width="118" height="86" as="geometry" />
+        </mxCell>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-48" value="List available tools" style="curved=1;startArrow=none;endArrow=block;exitX=0.8793887209186673;exitY=-0.008823478923124425;entryX=0.2675351309489978;entryY=0.008333374472225414;rounded=0;" edge="1" parent="1" source="Thbh-QFBYTHm9kd9v6Cp-43" target="Thbh-QFBYTHm9kd9v6Cp-45">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="333" y="61" />
+              <mxPoint x="1588" y="61" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-49" value="Define agent workflow" style="curved=1;startArrow=none;endArrow=block;exitX=0.9572241467735727;exitY=0.981372636907241;entryX=0.0004676663145727041;entryY=0.4803922036114861;rounded=0;" edge="1" parent="1" source="Thbh-QFBYTHm9kd9v6Cp-43" target="Thbh-QFBYTHm9kd9v6Cp-46">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="333" y="148" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-50" value="" style="curved=1;startArrow=block;endArrow=block;exitX=0.6825087115723567;exitY=-0.005813898042190907;entryX=0.16300307325148078;entryY=0.008333374472225414;rounded=0;" edge="1" parent="1" source="Thbh-QFBYTHm9kd9v6Cp-47" target="Thbh-QFBYTHm9kd9v6Cp-45">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1498" y="81" />
+              <mxPoint x="1588" y="81" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-51" value="Register metadata" style="curved=1;startArrow=none;endArrow=block;exitX=0.9999353633904309;exitY=0.49526631598379095;entryX=0.000631390195904356;entryY=0.25309610073401373;rounded=0;" edge="1" parent="1" source="Thbh-QFBYTHm9kd9v6Cp-38" target="Thbh-QFBYTHm9kd9v6Cp-45">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1498" y="469" />
+              <mxPoint x="1588" y="110" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-52" value="Register metadata" style="curved=1;startArrow=none;endArrow=block;exitX=0.9986646212064303;exitY=0.5004950691671932;entryX=0.000631390195904356;entryY=0.889914038654774;rounded=0;" edge="1" parent="1" source="Thbh-QFBYTHm9kd9v6Cp-39" target="Thbh-QFBYTHm9kd9v6Cp-45">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1498" y="571" />
+              <mxPoint x="1588" y="149" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-53" value="Register metadata" style="curved=1;startArrow=none;endArrow=block;exitX=0.996062069404416;exitY=0.5057238223505955;entryX=0.2585444781203661;entryY=0.9985294903025907;rounded=0;" edge="1" parent="1" source="Thbh-QFBYTHm9kd9v6Cp-40" target="Thbh-QFBYTHm9kd9v6Cp-45">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1498" y="672" />
+              <mxPoint x="1588" y="187" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-54" value="Deploy agent as container" style="curved=1;startArrow=none;endArrow=block;exitX=1.0002869897959183;exitY=0.4803922036114861;entryX=0.4462310148736553;entryY=0.001332089520882869;rounded=0;" edge="1" parent="1" source="Thbh-QFBYTHm9kd9v6Cp-46" target="Thbh-QFBYTHm9kd9v6Cp-41">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="971" y="148" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-55" value="Register agent metadata" style="curved=1;startArrow=none;endArrow=block;exitX=0.6637213334367746;exitY=0.9993997518567072;entryX=0.3360732181242366;entryY=0.9985294903025907;rounded=0;" edge="1" parent="1" source="Thbh-QFBYTHm9kd9v6Cp-41" target="Thbh-QFBYTHm9kd9v6Cp-45">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1223" y="742" />
+              <mxPoint x="1498" y="742" />
+              <mxPoint x="1588" y="217" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-56" value="Calls API" style="curved=1;dashed=1;dashPattern=2 3;startArrow=none;endArrow=block;exitX=0.7776966476176617;exitY=0.001332089520882869;entryX=-0.00025873598845108694;entryY=0.49526631598379095;rounded=0;" edge="1" parent="1" source="Thbh-QFBYTHm9kd9v6Cp-41" target="Thbh-QFBYTHm9kd9v6Cp-38">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1223" y="469" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-57" value="Calls API" style="curved=1;dashed=1;dashPattern=2 3;startArrow=none;endArrow=block;exitX=0.9974563953488372;exitY=0.500365920688795;entryX=0.0010683891100761217;entryY=0.5004950691671932;rounded=0;" edge="1" parent="1" source="Thbh-QFBYTHm9kd9v6Cp-41" target="Thbh-QFBYTHm9kd9v6Cp-39">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-59" value="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="890" y="70" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-60" value="2" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="270" y="106" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-61" value="3" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="910" y="181" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Thbh-QFBYTHm9kd9v6Cp-62" value="4" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1510" y="626" width="20" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

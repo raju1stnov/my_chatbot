@@ -172,6 +172,100 @@ That’s how  **MCP bridges AI agents and backend services** . It  **removes glu
 
 
 
+### Example Registry Schema Entries (JSON)
+
+Finally, to illustrate how information is stored in the centralized registry, below are example JSON entries for a core service and a user-defined agent. These entries show the kind of metadata the registry holds.
+
+**Example 1: Base MCP Service (WebService)** – This could be an entry in the registry for the WebService tool. It lists the service’s name, type, description, the API endpoint, and details of the tool(s) it provides (in this case, one tool for web search). It also shows version info and last update time as part of versioning metadata.
+
+
+```json
+{
+  "name": "WebService",
+  "type": "base_service",
+  "description": "Provides web search functionality to retrieve information from the internet.",
+  "endpoint": "https://api.myplatform.com/tools/webservice",
+  "tools": [
+    {
+      "name": "searchWeb",
+      "description": "Searches the web for a query and returns relevant results.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string", "description": "Search query string" }
+        },
+        "required": ["query"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "results": { "type": "array", "items": { "type": "string" } }
+        },
+        "description": "List of result snippets or URLs"
+      },
+      "examples": [
+        {
+          "input": { "query": "latest AI agent frameworks" },
+          "output": { "results": ["LangChain vs MCP – article summary ...", "..."] }
+        }
+      ]
+    }
+  ],
+  "version": "1.2",
+  "last_updated": "2025-03-10T08:30:00Z"
+}
+
+```
+
+
+**Example 2: User-Defined Agent (HRRecruitingAssistant)** – This is an example registry entry for the HR Recruiting Assistant agent we described. It contains similar fields: name, type (indicating it’s a custom agent), description, its own endpoint, and the tool(s) it offers (here one main function to answer HR queries). The input schema reflects that it expects a candidate name and a question, and the output is an answer string. We also include an example. Version is 1.0 since it’s the first deployment, and there’s a field that lists which base services it leverages (this could help in understanding dependencies or for informational purposes).
+
+
+```json
+{
+  "name": "HRRecruitingAssistant",
+  "type": "agent",
+  "description": "Agent that answers HR queries by combining internal BigQuery data and web search results.",
+  "endpoint": "https://api.myplatform.com/agents/hr-recruiting-assistant",
+  "tools": [
+    {
+      "name": "answerHRQuery",
+      "description": "Answers a recruiting question using internal and external data.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "candidate_name": { "type": "string", "description": "Name of the job candidate" },
+          "question":       { "type": "string", "description": "The HR question to answer about the candidate" }
+        },
+        "required": ["candidate_name", "question"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "answer": { "type": "string", "description": "Detailed answer to the HR query" }
+        }
+      },
+      "examples": [
+        {
+          "input": {
+            "candidate_name": "Jane Doe",
+            "question": "What projects has this candidate worked on, and what do we know about her online presence?"
+          },
+          "output": {
+            "answer": "Jane Doe has worked on Project X and Project Y according to internal records. Online, we found her LinkedIn profile which shows... [etc.]"
+          }
+        }
+      ]
+    }
+  ],
+  "version": "1.0",
+  "created_at": "2025-04-02T10:00:00Z",
+  "dependencies": ["WebService", "BigQueryService"]
+}
+
+```
+
+
 
 ```mermaid
 flowchart TD
