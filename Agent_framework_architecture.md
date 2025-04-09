@@ -1,7 +1,3 @@
-
-
-
-
 ### MCP server inclusion
 
 Modern AI **agents** often combine multiple tools and data services to accomplish complex tasks. In our scenario, we have both prebuilt AI assistants (e.g. a Knowledge Assistant built on LangGraph, a Security Assistant on CrewAI) and standalone microservices providing specific capabilities (e.g. a BigQuery query service, a web browsing service, an authentication service). The goal is to treat all these components as *first-class agents* in a unified architecture. This means exposing them through a single **Agent Registry** (for discovery) and an **Agent Gateway** (for invocation) with a common interface and metadata. By standardizing how agents and services are registered and invoked, we eliminate custom one-off integrations and achieve a modular, scalable system [dev.to](https://dev.to/sudhakar_punniyakotti/mcp-the-api-gateway-for-ai-agents-4ldn#:~:text=Inspired%20by%20microservices%20architecture%2C%20MCP,integrate%20seamlessly%20into%20broader%20workflows)[huggingface.co](https://huggingface.co/blog/Kseniase/mcp#:~:text=It%E2%80%99s%20important%20to%20highlight%20again,are%20called%20and%20information%20exchanged) . In this architecture, an AI agent can seamlessly discover and call any tool or service via a common protocol, much like plugging into a universal API **gateway**[huggingface.co](https://huggingface.co/blog/Kseniase/mcp#:~:text=It%20is%20akin%20to%20a,sophisticated%20tasks%20across%20diverse%20contexts) The unified approach has several benefits:
@@ -12,6 +8,42 @@ Modern AI **agents** often combine multiple tools and data services to accomplis
 * **Flexible composition:** Developers or even business users can compose new agents by wiring together existing services or agents via code or a visual builder, leveraging the common interface.
 
 Below we present an updated architecture diagram and a detailed explanation of each layer, the flows for agent creation and usage, environment management, and key design considerations.
+
+**showing one flow**
+
+```mermaid
+flowchart LR
+    subgraph User_Environment [User Environment]
+        U["`User (Agent Developer)`"]
+        subgraph Composition[Low-Code Builder / SDK]
+            CrewAI[CrewAI / LangGraph Framework]
+        end
+        U --> |"1 List available tools"| RegistryAPI
+        U --> |"2 Define agent workflow"| CrewAI
+    end
+    subgraph Kubernetes["Kubernetes Cluster"]
+        WS["`WebService<br/>(FastAPI Microservice)`"]
+        BQ["`BigQueryService<br/>(FastAPI Microservice)`"]
+        Auth["`AuthService<br/>(FastAPI Microservice)`"]
+        HR["`HRRecruitingAssistant Agent<br/>(FastAPI Microservice)`"]
+    end
+    RegistryDB[(Cloud Spanner<br/>Registry)]
+    RegistryAPI[["`Registry Service<br/>(/tools API)`"]]
+    RegistryDB <--> RegistryAPI
+  
+    WS --> |Register metadata| RegistryAPI
+    BQ --> |Register metadata| RegistryAPI
+    Auth --> |Register metadata| RegistryAPI
+    CrewAI --> |"3 Deploy agent as container"| HR
+    HR --> |Register agent metadata| RegistryAPI
+    HR -.-> |Calls API| WS
+    HR -.-> |Calls API| BQ
+    %% Arrows legend or numbering in labels:
+    click RegistryAPI "Description: Central /tools endpoint that queries Cloud Spanner for tool registry"
+    click HR "Description: User-created agent microservice that orchestrates calls to WebService and BigQueryService"
+
+```
+
 
 ```mermaid
 graph LR
@@ -63,7 +95,6 @@ graph LR
 
 ```
 
-
 ### Why Is MCP Better Than Just a Service?
 
 | Feature                  | Normal API               | MCP Server                                         |
@@ -76,7 +107,6 @@ graph LR
 | LLM Readiness (tool use) | ❌ Prompt hack needed    | ✅ Plug-and-play with tool calling                 |
 | Reusability              | Manual API doc           | ✅ Self-documenting + reuse by agents              |
 | Framework Agnostic       | Usually tied to impl     | ✅ Can be used from any framework via standard API |
-
 
 **What Makes a Service an MCP Server?**
 
@@ -93,11 +123,9 @@ An  **MCP server** , on the other hand:
 * Follows a **standard interface contract** (like OpenAPI for LLM tool use) — consistent across all services.
 * Enables **dynamic registration and chaining** — agents can load its capabilities and use them like plugins.
 
-
 ### FastAPI Example: BigQuery MCP Server
 
 Let’s write a **simplified FastAPI-based MCP server** called `BigQueryMCPServer`.
-
 
 ```python
 # bigquery_mcp_server.py
@@ -143,7 +171,6 @@ async def list_tools():
 
 ```
 
-
 How Do Agents Use It?
 
 Let’s say you have a **LangGraph agent** that connects to the registry, reads the `/tools` from `BigQueryService`, and gets:
@@ -170,14 +197,11 @@ It registers that as a  **tool in the agent runtime** , and the LLM can now invo
 
 That’s how  **MCP bridges AI agents and backend services** . It  **removes glue code** , makes your services  **composable** , and aligns with **tool-use-by-LLM** standards — especially helpful in agentic platforms like LangGraph, Autogen, CrewAI.
 
-
-
 ### Example Registry Schema Entries (JSON)
 
 Finally, to illustrate how information is stored in the centralized registry, below are example JSON entries for a core service and a user-defined agent. These entries show the kind of metadata the registry holds.
 
 **Example 1: Base MCP Service (WebService)** – This could be an entry in the registry for the WebService tool. It lists the service’s name, type, description, the API endpoint, and details of the tool(s) it provides (in this case, one tool for web search). It also shows version info and last update time as part of versioning metadata.
-
 
 ```json
 {
@@ -217,9 +241,7 @@ Finally, to illustrate how information is stored in the centralized registry, be
 
 ```
 
-
 **Example 2: User-Defined Agent (HRRecruitingAssistant)** – This is an example registry entry for the HR Recruiting Assistant agent we described. It contains similar fields: name, type (indicating it’s a custom agent), description, its own endpoint, and the tool(s) it offers (here one main function to answer HR queries). The input schema reflects that it expects a candidate name and a question, and the output is an answer string. We also include an example. Version is 1.0 since it’s the first deployment, and there’s a field that lists which base services it leverages (this could help in understanding dependencies or for informational purposes).
-
 
 ```json
 {
@@ -265,8 +287,6 @@ Finally, to illustrate how information is stored in the centralized registry, be
 
 ```
 
-
-
 ```mermaid
 flowchart TD
     subgraph UI
@@ -283,11 +303,11 @@ flowchart TD
         AG -->|standard API| ADAPTER_LG[LangGraph Adapter]
         AG -->|standard API| ADAPTER_CR[CrewAI Adapter]
         AG -->|standard API| ADAPTER_X[Future Adapter]
-      
+    
         ADAPTER_LG --> KNOW["Knowledge Assistant"]
         ADAPTER_LG --> AUTH["Auth Assistant"]
         ADAPTER_LG --> LLMGEN[LLM Response Generator]
-      
+    
         ADAPTER_CR --> SEC["Security Assistant (CrewAI)"]
     end
 
@@ -336,7 +356,6 @@ Below is a tabulated comparison for clarity, focusing on the top five features:
 
 This analysis reveals that LangGraph is the top choice for complex, stateful, and scalable multi-agent systems, particularly in enterprise settings. CrewAI suits simpler, collaborative tasks, while AutoGen is ideal for dynamic, conversational applications. MCP, unexpectedly, excels in integration and state management for external data, but its lower workflow handling suggests it’s complementary rather than a direct competitor for agent orchestration. Developers should choose based on specific needs, such as workflow complexity, integration requirements, and scalability goals.
 
-
 ### **Comparison of Agentic Architectures**
 
 The comparison table between **Hierarchical Multi-Agent** and other architectures:
@@ -357,7 +376,6 @@ The comparison table between **Hierarchical Multi-Agent** and other architecture
 **Hierarchical Multi-Agent** is ideal for your enterprise platform as it provides clear modularity, scalability, easier debugging, and explicit control of context across specialized agents.
 
 The proposed design is very much in line with emerging industry practices. For instance, LinkedIn’s AI recruiter system uses a hierarchical agent system with LangGraph – breaking down conversational search and matching into multiple layers of agents [langchain.com](https://www.langchain.com/built-with-langgraph#:~:text=AI%20that%20hires%20top%20talent) . Similarly, other companies have found that a network of specialized agents can outperform a single monolithic agent for complex workflows.
-
 
 ### Platform Orchestrator (Router)
 
@@ -414,11 +432,9 @@ Each of the domain-specific assistants –  **Knowledge Assistant** ,  **Cost As
 
   The Operations assistant might also integrate with other tools depending on needs – for example, if some data is in a monitoring system or an API (not BigQuery), a node could call that API. LangGraph allows those integrations as part of the workflow (each node can call out to any necessary service or tool). The architecture keeps it modular: if tomorrow we decide to use a different data source for operations, we can modify that assistant without affecting others.
 
-
 ### Example: Knowledge Assistant Code Scaffold (LangGraph)
 
 Below is a simplified code scaffolding for the  **Knowledge Assistant** . This pseudocode outlines how we can define the LangGraph state and nodes (sub-agents) for retrieving and answering a knowledge query:
-
 
 ```python
 from langgraph import StateGraph
@@ -480,7 +496,6 @@ knowledge_graph.set_end("responder")
 #    answer = final_state.result  # This is sent back to the Orchestrator
 
 ```
-
 
 ### Cache Schema redis
 

@@ -50,9 +50,9 @@ This system combines 3 critical AIPlatform functions in one assistant:
 ```mermaid
 graph LR
     A[("👤 User Question")] --> B{{"🦸♂️ AI Platform Assistant"}}
-    B --> C[("📚 Knowledge Magic")]
-    B --> D[("⚙️ Operations Magic")]
-    B --> E[("💰 Cost Magic")]
+    B --> C[("📚 Knowledge Agent")]
+    B --> D[("⚙️ Operations Agent")]
+    B --> E[("💰 Cost Agent")]
     C --> F[("✨ Answer")]
     D --> F
     E --> F
@@ -951,3 +951,126 @@ Hybrid vector database indexing combines the benefits of vector-based search (us
 **Example:**
 
 When a user queries about “model training,” the vector search finds all semantically similar chunks. Then, using metadata filtering, the system restricts the results to the repos that are known to handle model training (as determined by the `parsed_query["relevant_repos"]`).
+
+
+
+### **Your Use Case Requirements**
+
+1. **Goal**: Analyze GitHub repositories (`.py` files, `README.md`, etc.) to:
+
+   - Build a **knowledge graph** of entities (classes, functions, dependencies)
+   - Create relationships between code components and documentation
+   - Use this context for semantic search (via VectorDB like Milvus)
+2. **Key Needs**:
+
+   - Code/Repo parsing (`*.py` files)
+   - Entity extraction (functions, classes, dependencies)
+   - Documentation analysis (`README.md` → knowledge graph edges)
+   - Integration with custom VectorDB/KG infrastructure
+
+---
+
+## **Microsoft 365 Copilot Capabilities**
+
+Microsoft 365 Copilot is **not designed for code/technical repository analysis**. Here's why:
+
+#### 1. **Data Scope Limitations**
+
+- **Focus**: Works with **Microsoft 365 data** (Outlook emails, Word/Excel files, Teams chats, SharePoint documents).
+- **No Native GitHub Integration**: It cannot directly analyze GitHub repositories or parse `.py`/code files unless they are explicitly stored in SharePoint/OneDrive.
+- **No Code Parsing**: Lacks specialized code understanding (e.g., Python class/function extraction).
+
+#### 2. **Knowledge Graph Limitations**
+
+- **Prebuilt Entities**: M365 Copilot understands **business entities** (people, meetings, documents) but cannot create custom entity relationships for codebases.
+- **No Custom KG Integration**: It uses Microsoft Graph for organizational data, not custom knowledge graphs for code relationships.
+
+#### 3. **VectorDB/ML Limitations**
+
+- **Closed Ecosystem**: M365 Copilot uses Microsoft’s proprietary models (GPT-4 via Azure) and internal embeddings. You cannot:
+  - Export its embeddings to your VectorDB (Milvus)
+  - Customize its retrieval logic for code-specific contexts.
+
+---
+
+### **Why It’s Not a Direct Fit**
+
+| **Your Need**         | **M365 Copilot Capability**  |
+| --------------------------- | ---------------------------------- |
+| GitHub repo parsing         | ❌ No native support               |
+| Code entity extraction      | ❌ Not designed for code analysis  |
+| Custom knowledge graph      | ❌ Limited to Microsoft 365 data   |
+| Hybrid search with VectorDB | ❌ Closed retrieval system         |
+| Code dependency mapping     | ❌ No technical graph capabilities |
+
+---
+
+### **Workarounds (If You Still Want to Use M365 Copilot)**
+
+If you want to involve M365 Copilot **indirectly**, here’s how:
+
+#### 1. **Hybrid Approach**
+
+- Use **custom agents** (Python-based) to:
+  1. Parse GitHub repos → extract entities → build your knowledge graph.
+  2. Store summaries/conclusions in SharePoint/OneDrive.
+- Let M365 Copilot surface these summaries to users via Teams/Outlook.
+
+#### 2. **Limited Use Case**
+
+- If users ask questions like *"Where is the documentation for X feature?"*, M365 Copilot could:
+  - Search SharePoint/OneDrive for your pre-generated documentation (if stored there).
+  - **But**: This skips code analysis and KG logic entirely.
+
+---
+
+### **Better Alternatives**
+
+For your specific needs, consider these instead:
+
+#### 1. **GitHub Copilot**
+
+- **Strengths**:
+  - Code-aware (understands Python/other languages)
+  - Can suggest code completions based on repo context
+- **Limitations**: No native knowledge graph/VectorDB integration.
+
+#### 2. **Custom Agents + Open-Source Tools**
+
+- Use frameworks like **LangChain**/**LlamaIndex** to:
+  - Parse `.py` files → extract entities (with libraries like `ast` or `tree-sitter`).
+  - Build a knowledge graph (Neo4j, TigerGraph).
+  - Integrate with Milvus for hybrid search.
+- Example flow:
+  ```python
+  # Custom code parser
+  from ast import parse, ClassDef, FunctionDef
+
+  with open("train_cli.py") as f:
+      tree = parse(f.read())
+
+  # Extract classes/functions
+  entities = [
+      node.name for node in tree.body
+      if isinstance(node, (ClassDef, FunctionDef))
+  ]
+  ```
+
+#### 3. **Azure AI Services**
+
+- Use **Azure Cognitive Search** with custom skills to:
+  - Index GitHub repos.
+  - Enrich data with entity extraction (using Azure AI Language Service).
+- Integrate with your VectorDB/KG.
+
+---
+
+### **Final Recommendation**
+
+**Avoid Microsoft 365 Copilot** for this use case. Instead:
+
+1. Build **custom agents** for code analysis and KG construction.
+2. Use **LLMs (GPT-4/Claude)** for contextual understanding.
+3. Leverage **open-source tools** (LangChain, Milvus, Neo4j) for the pipeline.
+
+Microsoft 365 Copilot is better suited for **business productivity workflows** (e.g., summarizing emails, drafting documents), not technical codebase analysis. For GitHub-centric AI, combine GitHub Copilot with your custom agentic framework.
